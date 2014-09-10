@@ -10,7 +10,7 @@ Version: 1.0'''
 BOTNAME     = 'StalkerBot3000'
 USERAGENT   = 'Stalker bot to send comments and submission info via email. Author: /u/13djwright'
 SUBREDDIT   = 'all'
-USERS_TO_FOLLOW = ['mrswright_89', 'some_whiteguy69', 'D_Web']
+USERS_TO_FOLLOW = []
 MESSAGE     = ""
 CHANGES     = 0
 server      = smtplib.SMTP("smtp.gmail.com",587)
@@ -29,8 +29,13 @@ print 'DONE'
 print 'Logging in to Reddit...'
 r = praw.Reddit(USERAGENT)
 print 'DONE'
+for row in cur.execute('SELECT name from users where name is not "13djwright"'):
+    USERS_TO_FOLLOW.append(str(row[0]))
+
+EMAIL    = str(cur.execute('select email from users where name is "13djwright"').fetchone()[0])
 PASSWORD = str(cur.execute('SELECT password from users where name is "13djwright"').fetchone()[0])
-server.login('13djwright@gmail.com',PASSWORD)
+
+server.login(EMAIL,PASSWORD)
 
 #---------HELPER FUNCTIONS---------#
 
